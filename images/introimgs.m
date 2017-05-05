@@ -3,6 +3,7 @@
 % (2) approximate linearly separable (from gmm)
 % (3) not linearly separable.
 clearvars; close all; clc
+
 %% Linearly separable sample
 mu1  = [8, 5];
 sig1 = [1.3, 1.1; 1.1, 1.3];
@@ -47,7 +48,7 @@ P   = ones(1,2)/2;
 gm  = gmdistribution(mu, sig, P);
 gmPDF = @(x,y)pdf(gm,[x y]);
 h = ezcontour(gmPDF,[-5 10],[-1 6.5]); hold on;
-set(h, 'linewidth', 1.5, 'color', [0.8, 0.8, 0]);
+set(h, 'linewidth', 1.5, 'color', 'g');
 LS1 = random(gm, 400);
 for i=1:size(LS1, 1)
     X1 = pdist([LS1(i, 1), LS1(i, 2); 1, 1]);
@@ -68,7 +69,33 @@ grid on
 set(gca, 'fontsize', 18)
 hold off;
 
+%% None linear dataset
+clearvars; closea all;
+n  = 200; 
+R  = 0.5;
+x0 = 0;
+y0 = 0;
 
+t  = 2 * pi * rand(n,1);
+r  = R * sqrt(rand(n,1));
 
+r_ = 1.1 * R * sqrt(1 + rand(n,1));
+t_ = 2 * pi * rand(n,1);
 
+x = x0 + r.*cos(t);
+y = y0 + r.*sin(t);
 
+x_ = x0 + r_.*cos(t_);
+y_ = y0 + r_.*sin(t_);
+
+plot(x, y, 'ro'); hold on;
+plot(x_, y_, 'bo'); grid on;
+
+xlabel('$x_1$', 'interpreter', 'latex')
+ylabel('$x_2$', 'interpreter', 'latex')
+
+legend('positive', 'negative');
+axis([-1 1 -1 1]);
+title('Not Linearly Separable Case');
+set(gca, 'fontsize', 18);
+hold off;
